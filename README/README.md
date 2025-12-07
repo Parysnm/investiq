@@ -68,6 +68,9 @@ Parys NOYON--MATHURIN
    6.5. Validation des données\
    6.6. Mise en place de tests fiables
 1. **Pistes d’amélioration**
+   Conclusion
+
+1. **Sources**\
 
 ## **1. Présentation générale**\
 
@@ -1308,4 +1311,5 @@ Aide de chat gpt pour le rapport et la construction des fichiers de l’applicat
 – *Yahoo Finance (via la bibliothèque yfinance)*\
 – *Stooq (fallback plus stable en cas d'erreur réseau)*
 2
+
 
