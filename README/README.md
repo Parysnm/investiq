@@ -1,4 +1,4 @@
-﻿**InvestIQ – Application Fullstack Data (FastAPI, Docker, Finance Quantitative)**
+﻿# **InvestIQ – Application Fullstack Data (FastAPI, Docker, Finance Quantitative)**
 
 
 
@@ -6,7 +6,7 @@
 
 
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.001.jpeg)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.001.jpeg)
 
 
 
@@ -28,11 +28,51 @@ Parys NOYON--MATHURIN
 
 
 
+## **Sommaire**
 
-**1. Présentation générale**\
+1. **Présentation générale**\
+   1.1. Contexte académique\
+   1.2. Choix du sujet : pourquoi une application de gestion de portefeuilles financiers ?
+1. **Présentation de l’application InvestIQ**\
+   2.1. Objectif fonctionnel\
+   2.2. Stack technique\
+   2.3. Principales fonctionnalités\
+   2.4. Rôle des données de marché
+1. **Architecture technique**\
+   3.1. Schéma global de l’architecture\
+   3.2. Structure interne du backend (FastAPI)\
+   3.3. Description des composants\
+   3.4. Cycle complet d’une requête utilisateur
+1. **Choix algorithmiques**\
+   4.1. Prétraitement des données\
+   4.2. Rendements logarithmiques\
+   4.3. Moyenne des rendements\
+   4.4. Matrice de covariance\
+   4.5. Définition du portefeuille\
+   4.6. Optimisation Min-Variance\
+   4.7. Optimisation Max-Sharpe\
+   4.8. Calcul des métriques\
+   4.9. Pipeline complet\
+   4.10. Justification des choix
+1. **Travail accompli vs attentes**\
+   5.1. Exigences initiales → Implémentation réalisée\
+   5.2. Fonctionnalités supplémentaires développées\
+   5.3. Démonstration du bon fonctionnement tests\
+   5.4.Frontend
+
+1. **Difficultés rencontrées**\
+   6.1. Docker\
+   6.2. Organisation interne de l’API\
+   6.3. Intégration de yfinance\
+   6.4. Optimisation numérique\
+   6.5. Validation des données\
+   6.6. Mise en place de tests fiables
+1. **Pistes d’amélioration**
+
+## **1. Présentation générale**\
 
 
-1\.1. Contexte académique
+### 1\.1. Contexte académique
 
 **InvestIQ** est une application web fullstack développée dans le cadre du module **E5 – DSIA 5102A**.
 
@@ -63,12 +103,7 @@ L’application combine ainsi des aspects :
 - **modélisation financière** (Markowitz, ratio de Sharpe),
 - et **ingénierie logicielle** (tests, architecture, bonnes pratiques).
 
-
-
-
-
-
-1\.2. Choix du sujet : pourquoi une application de gestion de portefeuilles financiers ?
+### 1\.2. Choix du sujet : pourquoi une application de gestion de portefeuilles financiers ?
 
 J’ai volontairement orienté le projet vers la **finance quantitative**, car ce sujet :
 
@@ -92,13 +127,10 @@ C’est donc **doublement formateur** :
 
 |<p>**Axe**</p><p></p><p></p>|<p>**Ce qu’il m’a apporté**</p><p></p><p></p><p></p>|
 | :-: | :-: |
-|**Technique**|` `: maîtrise de FastAPI, PostgreSQL, Docker, JWT, tests|
+|**Technique**|` ` maîtrise de FastAPI, PostgreSQL, Docker, JWT, tests|
 |**Financier**|compréhension opérationnelle des modèles Markowitz / Sharpe|
 
 
-##
-##
-##
 ## **2. Présentation générale de l’application InvestIQ**
 ### 2\.1. Objectif fonctionnel
 Proposer à un utilisateur authentifié une allocation de portefeuille optimisée à partir d’une liste d’actifs financiers,** en s’appuyant sur la théorie de Markowitz (min-variance, max-Sharpe), tout en permettant de **sauvegarder** et **consulter** ces portefeuilles.
@@ -168,9 +200,6 @@ Du point de vue utilisateur et métier, l’application InvestIQ fournit quatre 
    1. Les poids, tickers et métriques sont stockés de manière sérialisée, afin de pouvoir être rechargés et affichés par un client externe.
 
 
-
-
-
 ### 2\.4. Rôle des données de marché
 Les calculs d’optimisation reposent sur des **prix historiques** :
 
@@ -189,21 +218,10 @@ Cela permet de séparer clairement :
 
 - la **partie “data ingestion”** (récupération / mise à jour des données de marché),
 - de la **partie “optimisation”** (calcul des poids optimaux à partir de ces données).
------
-### 2\.5. Positionnement par rapport aux objectifs du module
-Enfin, InvestIQ répond à l’ensemble des critères du module :
 
-- **Application web** : API REST documentée, utilisable via Swagger.
-- **Gestion d’utilisateurs** : modèles User, routes d’inscription / connexion.
-- **Authentification** : JWT, sécurisation de routes.
-- **Base de données** : PostgreSQL, modèles SQLAlchemy (User, Asset, Portfolio).
-- **Docker** : Dockerfile + docker-compose.yml avec au moins deux services (api + db).
-- **Gestion des erreurs** : usage d’HTTPException avec codes explicites (400, 401, 404, 409…).
-- **Tests automatisés** : tests sur l’optimisation, la cohérence des poids, etc.
-#
-#
-#
-# **3. Architecture Technique**
+
+
+##  **3. Architecture Technique**
 Elle s’organise autour de trois couches principales :
 
 - une **API backend** développée en FastAPI,
@@ -213,48 +231,10 @@ Elle s’organise autour de trois couches principales :
 L’ensemble est conteneurisé, orchestré et isolé via un fichier docker-compose.yml.
 
 -----
-## **3.1. Schéma global de l’architecture**
+###  **3.1. Schéma global de l’architecture**
 Voici une vision systémique de l’application :
 
-`                 `+----------------------------+
-
-`                 `|        Dashboard UI        |
-
-`                 `|          Streamlit         |
-
-`                 `+--------------+-------------+
-
-`                                `|
-
-`                                `|  HTTP (API REST)
-
-`                                `|
-
-`                     `+----------v----------+
-
-`                     `|      FastAPI        |
-
-`                     `|   Backend API       |
-
-`                     `+----------+----------+
-
-`                                `|
-
-`                     `SQLAlchemy ORM
-
-`                                `|
-
-`                                `v
-
-`                   `+-----------------------+
-
-`                   `|      PostgreSQL       |
-
-`                   `|  users / assets /     |
-
-`                   `| portfolios / prices   |
-
-`                   `+-----------------------+
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.002.png) 
 
 Ce découpage permet :
 
@@ -265,102 +245,13 @@ Ce découpage permet :
 
 
 
-
-
-## **3.2. Structuration interne du backend (FastAPI)**
-### 📁 Arborescence complète du projet
-investiq/
-
-│
-
-├── app/
-
-│   ├── main.py
-
-│   ├── core/
-
-│   │   ├── config.py
-
-│   │   ├── security.py
-
-│   │   └── deps.py
-
-│   ├── db/
-
-│   │   └── database.py
-
-│   ├── models/
-
-│   │   ├── user.py
-
-│   │   ├── asset.py
-
-│   │   └── portfolio.py
-
-│   ├── routers/
-
-│   │   ├── auth.py
-
-│   │   ├── assets.py
-
-│   │   ├── optimize.py
-
-│   │   ├── data\_router.py
-
-│   │   └── portfolios.py
-
-│   ├── services/
-
-│   │   ├── data\_loader.py
-
-│   │   ├── market\_data.py
-
-│   │   ├── optimizer.py
-
-│   │   ├── metrics.py
-
-│   │   └── backtest.py (futur)
-
-│   └── scripts/
-
-│       └── init\_db.py
-
-│
-
-├── dashboard/
-
-│   └── app.py
-
-│
-
-├── data/
-
-│   └── prices.csv
-
-│
-
-├── tests/
-
-│   ├── test\_auth.py
-
-│   ├── test\_health.py
-
-│   ├── test\_optimizer.py
-
-│   └── test\_portfolios.py
-
-│
-
-├── Dockerfile
-
-├── docker-compose.yml
-
-├── requirements.txt
-
-└── README.md
+### **3.2. Structuration du projet**
+### Arborescence complète du projet
+## ![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.003.png) 
 ##
-## **3.3. Description détaillée des composants**
-### 🔹 1. main.py — Point d’entrée de l’API
+##
+### **3.3. Description détaillée des composants**
+###  A. main.py — Point d’entrée de l’API
 Rôle :
 
 - instancier l’objet FastAPI,
@@ -382,7 +273,7 @@ app.include\_router(data\_router.router)
 app.include\_router(portfolios.router)
 
 -----
-### 🔹 2. Dossier core/ — Configuration centrale
+###  B. Dossier core/ — Configuration centrale
 Contient les modules critiques :
 
 |**Fichier**|**Rôle**|
@@ -394,7 +285,7 @@ Contient les modules critiques :
 **C’est le cœur de la sécurité.**
 
 -----
-### 🔹 3. Dossier db/ — Connexion à PostgreSQL
+###  C. Dossier db/ — Connexion à PostgreSQL
 Fichier principal : database.py
 
 Contient :
@@ -411,7 +302,7 @@ engine = create\_engine(settings.DATABASE\_URL)
 SessionLocal = sessionmaker(bind=engine)
 
 -----
-### 4\. Dossier models/ — Modèles SQLAlchemy
+### D\. Dossier models/ — Modèles SQLAlchemy
 Trois tables essentielles :
 
 |**Modèle**|**Champs principaux**|**Utilité**|
@@ -421,7 +312,7 @@ Trois tables essentielles :
 |Portfolio|user\_id, tickers, weights, metrics, created\_at|Sauvegarde des portefeuilles|
 
 Chaque modèle hérite de Base.-----
-### ` `5. Dossier routers/ — Endpoints REST
+### ` `E. Dossier routers/ — Endpoints REST
 Chaque fichier correspond à un module fonctionnel :
 
 |**Route**|**Rôle**|
@@ -437,7 +328,7 @@ Chaque fichier correspond à un module fonctionnel :
 - réponses typées avec Pydantic,
 - endpoints sécurisés via Depends(get\_current\_user).
 -----
-### ` `6. Dossier services/ — Logique métier
+### ` `F. Dossier services/ — Logique métier
 Toute la logique financière et data est isolée ici.\
 C’est important : **aucune logique métier dans les routers** → architecture propre.
 #### *Composants principaux :*
@@ -453,7 +344,7 @@ Permet de séparer :
 - *les calculs*,
 - *l’optimisation*.
 -----
-### 🔹 7. Dossier dashboard/ — Interface utilisateur
+###  G. Dossier dashboard/ — Interface utilisateur
 Streamlit permet à l’utilisateur de :
 
 - se connecter,
@@ -461,10 +352,10 @@ Streamlit permet à l’utilisateur de :
 - télécharger les données,
 - visualiser les allocations optimisées.
 
-Le dashboard repose **100 % sur l’API**, ce qui prouve que ton backend est propre, modulaire, et réutilisable.
+Le dashboard repose **100 % sur l’API**
 
 -----
-### 🔹 8. Conteneurisation : Dockerfile et docker-compose
+###  8. Conteneurisation : Dockerfile et docker-compose
 #### *Dockerfile*
 - utilise une image python:3.11-slim,
 - installe les dépendances,
@@ -502,30 +393,10 @@ Avantage :
 - démarrage automatique avec la BDD.
 
 -----
-## **3.4. Cycle complet d’une requête utilisateur**
+### **3.4. Cycle complet d’une requête utilisateur**
 Voici comment une requête parcourir le système, par exemple lors d’un appel à /optimize/min-variance :
 
-Client → FastAPI → Router optimize
-
-`         `↓        ↓
-
-`         `JWT       Validation Pydantic
-
-`         `↓
-
-`   `get\_current\_user()
-
-`         `↓
-
-`   `Service data\_loader → prices.csv
-
-`   `Service metrics     → rendements, covariance
-
-`   `Service optimizer   → SLSQP → poids optimaux
-
-`         `↓
-
-`      `Réponse JSON
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.004.png) 
 
 Ce pipeline garantit :
 
@@ -533,8 +404,6 @@ Ce pipeline garantit :
 - modularité,
 - lisibilité,
 - testabilité.
-
-
 
 
 
@@ -580,8 +449,11 @@ Ces tickers correspondent ici à des **ETF (Exchange Traded Funds)**, des fonds
 ` `**Ces quatre actifs sont volontairement très différents.**\
 Ils illustrent parfaitement l’effet de diversification utilisé par Markowitz.
 
------
-## **2. Prix historiques : pourquoi les utilise-t-on ?**
+
+
+
+
+### **2. Prix historiques : pourquoi les utilise-t-on ?**
 Les données d’entrée de l’optimisation sont des **prix quotidiens** (souvent adj\_close = prix ajusté en fin de journée).
 
 Exemple :
@@ -595,12 +467,12 @@ date, ticker, adj\_close
 Ces prix ne sont **pas directement utilisables** :\
 on doit les transformer en **rendements**, car ce sont les rendements qui décrivent la performance d’un actif.
 
------
-## **3. Rendements et log-returns**
+
+### **3. Rendements et log-returns**
 Un **rendement** mesure l’évolution du prix d’un actif d’un jour à l’autre.\
 Dans InvestIQ, on utilise les **rendements logarithmiques** :
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.002.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.005.png)
 
 Pourquoi ?
 
@@ -613,7 +485,7 @@ C’est **à partir des rendements**, et non des prix, que l’on calcule :
 - le rendement moyen,
 - la volatilité,
 - la covariance.
-## **4. Diversification : idée centrale de Markowitz**
+### **4. Diversification : idée centrale de Markowitz**
 La diversification signifie :
 
 *combiner plusieurs actifs différents pour réduire le risque global du portefeuille.*
@@ -625,8 +497,8 @@ Exemple :
 - Donc un portefeuille combinant les deux peut être **moins risqué** qu’un portefeuille 100 % SPY.
 
 C’est cette propriété que Markowitz exploite mathematiquement.
-##
-## **5. Covariance : mesurer comment les actifs bougent ensemble**
+
+### **5. Covariance : mesurer comment les actifs bougent ensemble**
 La **covariance** est une mesure statistique qui indique si deux actifs :
 
 - montent ensemble (forte covariance),
@@ -640,13 +512,13 @@ Pour l’optimisation :
 
 La matrice de covariance est **le cœur** du modèle Markowitz.
 
------
-## **6. Ratio de Sharpe (pour max-Sharpe)**
+
+### **6. Ratio de Sharpe (pour max-Sharpe)**
 Le ratio de Sharpe mesure :
 
 *Le rendement obtenu pour une unité de risque prise.*
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.003.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.006.png)
 
 - μ = rendement du portefeuille,
 - σ= risque du portefeuille,
@@ -659,8 +531,8 @@ Plus le Sharpe est élevé :
 
 L’optimisation *max-sharpe* consiste à maximiser ce ratio.
 
------
-## **7. Contraintes du portefeuille**
+
+### **7. Contraintes du portefeuille**
 Pour obtenir un portefeuille réaliste, InvestIQ impose :
 
 - **somme des poids = 1** (tout le capital investi),
@@ -671,20 +543,11 @@ Ces contraintes permettent d’obtenir un portefeuille :
 
 - clair,
 - équilibré,
-- adapté à un utilisateur non-expert.
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-#
-# **4. Choix algorithmiques**
+- adapté à un utilisateur non-expert.  
+  
+
+
+## **4. Choix algorithmiques**
 L’application repose principalement sur trois blocs mathématiques :
 
 1. **le calcul des rendements historiques**,
@@ -723,14 +586,14 @@ Cela garantit :
 - que tous les prix correspondent aux mêmes dates,
 - qu’il n’y a pas de trous dans les données,
 - que les calculs vectorisés sont corrects (corrélations, covariances...).
------
 
-## **4.2. Calcul des rendements logarithmiques**
+
+### **4.2. Calcul des rendements logarithmiques**
 Les modèles financiers ne travaillent pas directement sur les prix, mais sur les **variations de prix**,  rendements.
 
 InvestIQ utilise les **rendements logarithmiques** :
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.004.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.007.png)
 
 En Python :
 
@@ -746,34 +609,36 @@ date        SPY      AGG      GLD
 
 ...
 
------
-## **4.3. Moyenne des rendements (μ)**
+
+### **4.3. Moyenne des rendements (μ)**
 Pour chaque actif, on calcule :
 
 1. **la moyenne quotidienne** des rendements,
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.005.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.008.png)
 
 1. **le rendement annualisé**, en multipliant par 252 (jours de bourse par an)
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.006.png) 
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.009.png) 
 
 (252 = nombre moyen de jours de bourse par an).Ces valeurs représentent une **estimation du rendement attendu** dans les modèles utilisés.
-## **4.4. Matrice de covariance (Σ)**
+  
+
+### **4.4. Matrice de covariance (Σ)**
 La matrice de covariance est un élément central de la théorie de Markowitz :
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.007.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.010.png)
 
 On annualise la matrice :
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.008.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.011.png)
 
 En code :
 
 cov = returns.cov().values
 
------
-## **4.5. Construction du portefeuille : vecteur de poids** 
+
+### **4.5. Construction du portefeuille : vecteur de poids** 
 Un portefeuille est une répartition de l’investissement sous forme d’un vecteur :
 
 w=( w1,w2,...,wn)
@@ -788,15 +653,16 @@ Ces contraintes rendent l’optimisation :\
 ✔ réaliste,\
 ✔ intuitive,\
 ✔ adaptée à une utilisation “ETF / portefeuille passif”.
-## **4.6. Problème d’optimisation : Min-Variance**
+
+### **4.6. Problème d’optimisation : Min-Variance**
 ### ` `Objectif : minimiser le risque total
 Le risque du portefeuille est donné par :
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.009.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.012.png)
 
 Le problème devient :
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.010.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.013.png)
 
 Sous les contraintes définies plus haut.
 ### Méthode : SLSQP
@@ -812,9 +678,10 @@ res = minimize(objective, x0, bounds=bounds, constraints=cons, method="SLSQP")
 
 
 
-## **4.7. Problème d’optimisation : Max-Sharpe**
+### **4.7. Problème d’optimisation : Max-Sharpe**
+
 ### Objectif : maximiser le ratio Sharpe
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.011.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.014.png)
 
 \
 Dans le code, cela est transformé en **minimisation du Sharpe négatif** :
@@ -825,17 +692,17 @@ def neg\_sharpe(w):
 
 Avec les mêmes contraintes que Min-Variance.
 
------
-## **4.8. Calcul des métriques du portefeuille**
+
+### **4.8. Calcul des métriques du portefeuille**
 ### Une fois les poids obtenus :
 ###
 ### Rendement annualisé
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.012.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.015.png)
 ###
 ### Volatilité annualisée
-### ![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.013.png)
+### ![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.016.png)
 ### Sharpe Ratio
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.014.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.017.png)
 
 Ces trois métriques sont renvoyées par l’API dans :
 
@@ -851,7 +718,7 @@ Ces trois métriques sont renvoyées par l’API dans :
 
 
 -----
-## **4.9. Pipeline complet : Data → Optimisation**
+### **4.9. Pipeline complet : Data → Optimisation**
 `    `+---------------------+
 
 `    `|  Données brutes     |
@@ -908,8 +775,8 @@ Ces trois métriques sont renvoyées par l’API dans :
 
 Ce pipeline est **propre, modulaire et industrialisable**.
 
------
-## **4.10. Justification des choix algorithmiques**
+
+### **4.10. Justification des choix algorithmiques**
 
 |**Choix**|**Justification**|
 | :-: | :-: |
@@ -920,18 +787,11 @@ Ce pipeline est **propre, modulaire et industrialisable**.
 |Annualisation|cohérence avec les standards de marché|
 |No short-selling|modèle adapté à des utilisateurs non professionnels|
 |max-weight|limite la concentration excessive|
-#
-#
-#
-#
-#
-#
-#
-#
-#
-# **5. Travail accompli vs attentes**
------
-## **5.1. Exigences initiales → Implémentation réalisée**
+  
+
+## **5. Travail accompli vs attentes**
+
+### **5.1. Exigences initiales → Implémentation réalisée**
 
 |**Exigence du module**|**Implémentation réalisée dans InvestIQ**|
 | :-: | :-: |
@@ -944,27 +804,22 @@ Ce pipeline est **propre, modulaire et industrialisable**.
 |Conteneurisation|Dockerfile + docker-compose (API + DB + Dashboard)|
 |Tests automatisés|Auth, optimisation, cohérence des poids, portfolios|
 |Documentation|Swagger/OpenAPI auto-généré|
+.
 
-Résultat : **toutes les attentes du module ont été respectées**, avec des ajouts fonctionnels en plus.
+### **5.2. Fonctionnalités supplémentaires développées**
 
-## **5.2. Fonctionnalités supplémentaires développées**
-Au-delà du cahier des charges, plusieurs améliorations significatives ont été intégrées :
-
-- Implémentation de **l’optimisation Max-Sharpe** (optionnelle mais réaliste).
+- Implémentation de **l’optimisation Max-Sharpe** .
 - Ajout d’un **système complet de sauvegarde de portefeuilles**.
 - Possibilité de **mettre à jour les données marché via une API externe**.
 - Dashboard **Streamlit** consommant réellement l’API.
-- Suite de **tests Pytest** complète (authentification, optimisation, portefeuilles).
-- Architecture **service-based** rendant l’API extensible (backtest, nouvelles stratégies…).
 
 
 
-#
-#
-# **5.3. Démonstration du bon fonctionnement de l’application**
+
+### **5.3. Démonstration du bon fonctionnement de l’application**
 Cette section montre que l’API, les tests et le dashboard fonctionnent réellement.
-## **5.3.1. Fonctionnement des routes via Swagger**
-### A. Inscription d’un utilisateur (POST /auth/register)
+#### **5.3.1. Fonctionnement des routes via Swagger**
+#### A. Inscription d’un utilisateur (POST /auth/register)
 Cette route permet de créer un nouvel utilisateur dans la base de données en fournissant une adresse email et un mot de passe. Lors de l’enregistrement :
 
 - la validation Pydantic contrôle le format de l’email et du mot de passe,
@@ -973,9 +828,9 @@ Cette route permet de créer un nouvel utilisateur dans la base de données en f
 - un **token JWT** est immédiatement généré et renvoyé dans la réponse.
 
 \
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.015.png)*→ réponse* 
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.018.png)*→ réponse* 
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.016.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.019.png)
 
 ###
 
@@ -990,20 +845,20 @@ La réponse contient :
 
 Ce test garantit que l’authentification fonctionne correctement et que les routes protégées ne seront accessibles qu’avec un token valide
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.017.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.020.png)
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.018.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.021.png)
 
-C. Ajout et consultation d’actifs (POST /assets et GET /assets)
+#### C. Ajout et consultation d’actifs (POST /assets et GET /assets)
 
-### 1\. Ajout d’un actif — POST /assets
+ 1\. Ajout d’un actif — POST /assets
 L’utilisateur peut enregistrer un nouvel actif dans la base via un JSON contenant :
 
 - ticker (ex : "SPY"),
 - name (ex : "S&P 500 ETF"),
 - asset\_class (ex : "equity").
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.019.png)![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.020.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.022.png)![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.023.png)
 
 Le test vérifie que :
 
@@ -1012,12 +867,12 @@ Le test vérifie que :
 - l’actif est bien inséré dans PostgreSQL,
 - l’objet renvoyé contient un id généré automatiquement.
 -----
-### 2\. Consultation des actifs — GET /assets
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.021.png)
+#### 2\. Consultation des actifs — GET /assets
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.024.png)
 
 Cette route renvoie la liste complète des actifs stockés dans la base.
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.022.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.025.png)
 
 - les actifs ajoutés précédemment apparaissent correctement.
 ###
@@ -1027,11 +882,11 @@ Cette route renvoie la liste complète des actifs stockés dans la base.
 ###
 
 
-## **D. Optimisation Min-Variance (POST /optimize/min-variance)**
+#### **D. Optimisation Min-Variance (POST /optimize/min-variance)**
 Cette route applique le modèle de Markowitz dans le cas où l’objectif est **uniquement la minimisation du risque**, sans tenir compte du rendement.\
 L’utilisateur fournit une liste d’actifs et une contrainte de poids maximal :
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.023.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.026.png)
 
 Lors de l’exécution, l’API :
 
@@ -1042,7 +897,7 @@ Lors de l’exécution, l’API :
 
 La réponse obtenue pour cet exemple est :
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.024.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.027.png)
 
 La réponse renvoie :
 
@@ -1053,40 +908,26 @@ La réponse renvoie :
 
 |Entrée|Réponse|
 | :- | :- |
-|![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.025.png)|![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.026.png)|
+|![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.028.png)|![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.029.png)|
 
 ### Interprétation du résultat
 Dans un univers d’actifs faiblement corrélés, la solution optimale du problème Min-Variance est souvent une **allocation uniforme**, car elle maximise naturellement la diversification.\
 Ce résultat confirme que l’optimiseur utilise correctement la matrice Σ : l’égalité des poids est un **résultat mathématique**, pas un comportement arbitraire de l’API.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## **E. Optimisation Max-Sharpe (POST /optimize/max-sharpe)**
+#### **E. Optimisation Max-Sharpe (POST /optimize/max-sharpe)**
 La route Max-Sharpe optimise le portefeuille selon le **ratio de Sharpe**, qui mesure la performance ajustée du risque.\
 Contrairement à Min-Variance, cette approche introduit le rendement attendu dans l’objectif :
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.027.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.030.png)
 
 La réponse Swagger montre une allocation non uniforme :
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.028.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.031.png)
 
 
-### Interprétation du résultat
+#### Interprétation du résultat. 
+
 Ici, les poids ne sont plus égaux :\
 l’optimiseur surpondère **GLD**, car dans ton jeu de données, cet actif présente :
 
@@ -1098,9 +939,9 @@ Ce comportement est attendu : **Max-Sharpe privilégie l’actif avec le meille
 
 Exemple de tout à l’heure
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.029.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.032.png)
 
-## **Interprétation du résultat**
+#### **Interprétation du résultat**
 Ce résultat est particulièrement intéressant car il montre clairement que :
 
 - **GLD est surpondéré (60 %)** → c’est l’actif avec le meilleur couple rendement/risque dans l’historique fourni par prices.csv.
@@ -1114,54 +955,51 @@ Ce résultat est particulièrement intéressant car il montre clairement que :
 - la réponse n'est **pas symétrique** : les poids reflètent réellement les caractéristiques statistiques des actifs,
 - la route Max-Sharpe fonctionne différemment de Min-Variance et apporte une valeur ajoutée claire.
 -----
-# **E. Gestion des portefeuilles (POST /portfolios, GET /portfolios, DELETE /portfolios/{id})**
+### **E. Gestion des portefeuilles (POST /portfolios, GET /portfolios, DELETE /portfolios/{id})**
 La section *portfolios* regroupe l’ensemble des routes permettant à un utilisateur authentifié de sauvegarder, consulter et supprimer des portefeuilles optimisés.
 
 -----
-## **E.1. Enregistrement d’un portefeuille (POST /portfolios)**
+#### **E.1. Enregistrement d’un portefeuille (POST /portfolios)**
 Lorsqu’un utilisateur obtient une allocation via /optimize/min-variance ou /optimize/max-sharpe, il peut la stocker dans son espace via :
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.030.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.033.png)
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.031.png)
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.034.png)
 
 
 
 -----
-## **E.2. Consultation des portefeuilles (GET /portfolios)**
+#### **E.2. Consultation des portefeuilles (GET /portfolios)**
 *(→ insérer la capture de la liste des portefeuilles)*
 
 Cette route retourne l’ensemble des portefeuilles sauvegardés par l’utilisateur connecté.\
 La réponse se présente sous la forme d’une liste JSON :
 
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.032.png)Ce test confirme que :
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.035.png)Ce test confirme que :
 
 - la route GET fonctionne et renvoie uniquement les portefeuilles du bon utilisateur,
 - la sérialisation JSON est correcte,
 - les flottants et tableaux sont restitués exactement comme stockés.
 
+-----
 
-
-
+#### **E.3. Suppression d’un portefeuille (DELETE /portfolios/{id})**
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.036.png)La suppression d’un portefeuille se fait via l’ID fourni dans la liste précédente (1 dans notre cas)\
+![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.037.png)
 
 -----
-## **E.3. Suppression d’un portefeuille (DELETE /portfolios/{id})**
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.033.png)La suppression d’un portefeuille se fait via l’ID fourni dans la liste précédente (1 dans notre cas)\
-![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.034.png)
-
------
-# ` `**F. Mise à jour des données de marché (POST /data/update)**
+### ` `**F. Mise à jour des données de marché (POST /data/update)**
 Cette route permet de mettre à jour les prix utilisés par l’optimiseur.\
 Elle accepte plusieurs sources : yahoo, stooq, ou auto (fallback : CSV).
 
 -----
-## **F.1. Exemple de requête (POST /data/update)**
+#### **F.1. Exemple de requête (POST /data/update)**
 
 |<h2>**Entrée**</h2>|<h2>**Sortie**</h2>|
 | :-: | :-: |
-|<h2>![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.035.png)</h2>|<h2>![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.036.png)</h2>|
+|<h2>![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.038.png)</h2>|<h2>![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.039.png)</h2>|
 -----
-## **F.2. Fonctionnement**
+#### **F.2. Fonctionnement**
 À l’appel de cette route, l’API :
 
 1. tente de télécharger les prix via Yahoo Finance,
@@ -1175,14 +1013,8 @@ La réponse renvoie :
 - le message de validation.
 
 
-
-
-
-
-
------
-## **5.3.2. Tests automatisés (Pytest)**
-# ![](Aspose.Words.9a2ddb81-d1ed-448a-a8ab-15933daa67f8.037.png)
+### **5.3.2. Tests automatisés (Pytest)**
+# ![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.040.png)
 #
 |**Nom du test**|**Rôle du test** |
 | :-: | :-: |
@@ -1196,7 +1028,41 @@ La réponse renvoie :
 |**test\_create\_portfolio\_success**|Vérifie qu’un portefeuille peut être créé et correctement enregistré en base.|
 |**test\_list\_portfolios**|Vérifie que l’utilisateur peut récupérer la liste de ses portefeuilles.|
 |**test\_delete\_portfolio\_success**|Vérifie qu’un portefeuille existant peut être correctement supprimé.|
+
+## **5.4. Frontend**
+Le frontend a été initié sous la forme d’un **dashboard Streamlit** permettant d’interagir avec l’API FastAPI :
+
+- connexion d’un utilisateur via un token,
+- sélection d’une liste d’actifs,
+- lancement d’une optimisation Min-Variance ou Max-Sharpe,
+- affichage des allocations obtenues.
+
+Ce module montre que l’API est exploitable par une interface web, mais **le frontend n’est pas finalisé** :
+
+- l’interface actuelle ne comporte que des écrans de base,
+- aucune navigation complète n'a encore été implémentée,
+- certaines fonctionnalités (authentification persistante, graphiques, historique des portefeuilles) restent incomplètes,
+- les éléments visuels sont provisoires.
 #
+# ![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.041.png)
+# ![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.042.png)
+# ![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.043.png)
+
+
+- *Max-Sharpe* : aperçu de l’allocation obtenue\
+  **![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.044.png)**
+
+# ![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.045.png)
+
+
+*Min-Variance* : aperçu de la répartition optimale minimale de risque
+# ![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.046.png)
+# ![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.047.png)
+
+
+# **Backtest pas encore implementés**
+# ![](Aspose.Words.db55126e-374e-4067-afbc-1ef4d08c74d4.048.png)
+
 # **6. Difficultés rencontrées**
 ## **6.1. Difficultés liées à Docker**
 ### 6\.1.1. Ordre de démarrage (race condition)
@@ -1349,9 +1215,22 @@ Cette configuration garantit des tests unitaires rapides, indépendants et repro
 
 
 
-**7. Pistes d’amélioration**
+## **7. Pistes d’amélioration**
 
-**7.1. Backtesting complet**
+**7.1. Améliorations du dashboard Streamlit**
+
+Finir le dashboard
+
+**Évolutions possibles :**
+
+- visualisation de la frontière efficiente,
+- heatmap des corrélations,
+- meilleure navigation entre étapes,
+
+ajout d’un module d’aide à l’interprétation du portefeuille** 
+
+-----
+**7.2. Backtesting complet**
 
 L’étape la plus attendue pour compléter l’application est l’ajout d’un module de backtesting.
 
@@ -1405,18 +1284,7 @@ Le modèle Markowitz peut être étendu vers des approches plus avancées.
 **Intérêt :** obtenir des portefeuilles plus réalistes et mieux contrôlés.
 
 -----
-**7.5. Améliorations du dashboard Streamlit**
-
-Le dashboard est fonctionnel, mais pourrait devenir plus interactif.
-
-**Évolutions possibles :**
-
-- visualisation de la frontière efficiente,
-- heatmap des corrélations,
-- meilleure navigation entre étapes,
-- ajout d’un module d’aide à l’interprétation du portefeuille.
------
-**7.6. Industrialisation et CI/CD**
+**7.5. Industrialisation et CI/CD**
 
 Pour professionnaliser davantage le projet :
 
@@ -1426,5 +1294,18 @@ Pour professionnaliser davantage le projet :
 
 **Intérêt :** rendre le projet fiable, facile à déployer et prêt pour un usage réel.
 
+
+
+# **Conclusion**
+Ce projet m’a permis de développer une application  de gestion de portefeuilles, avec une API fonctionnelle, sécurisée et structurée autour de FastAPI, PostgreSQL et Docker. J’ai appliqué la théorie de Markowitz à travers deux optimisations (Min-Variance et Max-Sharpe) et mis en place un système d’authentification, de gestion d’actifs et de portefeuilles. Le travail m’a également confrontée à des problèmes réels — intégration des données, stabilité du solveur, organisation de l’API — que j’ai pu résoudre en renforçant l’architecture et les tests. Le frontend reste partiel.
+
+
+## 8. Source
+
+Aide de chat gpt pour le rapport et la construction des fichiers de l’application
+
+*Les données de marché utilisées pour les optimisations proviennent de deux sources principales :*\
+– *Yahoo Finance (via la bibliothèque yfinance)*\
+– *Stooq (fallback plus stable en cas d'erreur réseau)*
 2
 
