@@ -725,8 +725,6 @@ Ces trois métriques sont renvoyées par l’API dans :
 ![](1.png)
 
 
-Ce pipeline est **propre, modulaire et industrialisable**.
-
 
 ### **4.10. Justification des choix algorithmiques**
 
