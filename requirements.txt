@@ -1,0 +1,15 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+pydantic[email]==2.9.2
+SQLAlchemy==2.0.35
+psycopg2-binary==2.9.9
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+pandas==2.2.2
+numpy==1.26.4
+scipy==1.13.1
+pytest==8.3.2
+python-dotenv==1.0.1
+bcrypt==3.2.2
+yfinance==0.2.43
+pandas-datareader==0.10.0

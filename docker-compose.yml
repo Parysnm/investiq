@@ -1,0 +1,60 @@
+services:
+  db:
+    image: postgres:15
+    container_name: investiq-db
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: investiq
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    container_name: investiq-api
+    build: .
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql+psycopg2://app:app@db:5432/investiq
+      JWT_SECRET: change-me
+      JWT_ALG: HS256
+    ports:
+      - "8000:8000"
+    command: >
+      bash -c "
+        echo ' Waiting for PostgreSQL...';
+        until nc -z db 5432; do
+          sleep 1;
+        done;
+        echo '✅ PostgreSQL is up!';
+        python -m scripts.init_db &&
+        uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+      "
+    volumes:
+      - ./data:/app/data
+      - ./scripts:/app/scripts
+
+
+  dashboard:
+    container_name: investiq-dashboard
+    image: python:3.11-slim
+    working_dir: /dashboard
+    depends_on:
+      - api
+    command: >
+      bash -lc "
+        pip install --no-cache-dir -r requirements.txt &&
+        streamlit run app.py --server.port=8501 --server.address=0.0.0.0
+      "
+    volumes:
+      - ./dashboard:/dashboard
+      - ./data:/dashboard/data
+    ports:
+      - "8501:8501"
+    environment:
+      API_BASE: http://api:8000
+
+volumes:
+  pgdata:
