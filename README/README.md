@@ -722,59 +722,8 @@ Ces trois métriques sont renvoyées par l’API dans :
 
 -----
 ### **4.9. Pipeline complet : Data → Optimisation**
-`    `+---------------------+
+![](1.png)
 
-`    `|  Données brutes     |
-
-`    `|  prices.csv / API   |
-
-`    `+----------+----------+
-
-`               `|
-
-`               `v
-
-`    `Pivot (large) : un ticker = une colonne
-
-`               `|
-
-`               `v
-
-`      `Log-Returns (r\_t)
-
-`               `|
-
-`               `+------------------+
-
-`               `|                  |
-
-`               `v                  v
-
-`  `Moyenne (μ)           Covariance (Σ)
-
-`               `\        /
-
-`                `\      /
-
-`                 `v    v
-
-`              `Optimiseur
-
-`     `(SLSQP : min-variance / max-sharpe)
-
-`                 `|
-
-`                 `v
-
-`      `Poids optimaux (w\_i)
-
-`                 `|
-
-`                 `v
-
-`     `Métriques du portefeuille
-
-`   `(rendement, vol, Sharpe)
 
 Ce pipeline est **propre, modulaire et industrialisable**.
 
